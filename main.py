@@ -115,9 +115,11 @@ class AbstractCar:
         self.vel = -self.vel/2
         self.move()
 
+
 class Player_car1(AbstractCar):
     IMG = RED_CAR
     START_POS = (260, 797)
+
 
 class Player_car2(AbstractCar):
     IMG = GREEN_CAR
@@ -267,8 +269,6 @@ def handle_collision(player_car1, player_car2, computer_car, game_info):
             player_car1.reset()
             player_car2.reset()
             computer_car.reset()
-            
-
 
 def draw(win, images, player_car1, player_car2, computer_car, game_info):
     for img, pos in images:
