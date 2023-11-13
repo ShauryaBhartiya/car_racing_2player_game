@@ -57,42 +57,7 @@ def main():
         control_of_player2(player_car2)
         computer_car.move()
 
-
-        if player_car1.collide(TRACK_BORDER_MASK) != None:
-            player_car1.bounce()
-
-        if player_car2.collide(TRACK_BORDER_MASK) != None:
-            player_car2.bounce()
-
-        finish_collide_poi0 = player_car1.collide(FINISH_MASK, 224, 785)
-        finish_collide_poi1 = player_car2.collide(FINISH_MASK, 224, 785)
-        finish_collide_poi2 = computer_car.collide(FINISH_MASK, 224, 785)
-
-        if finish_collide_poi0 != None:
-            if finish_collide_poi0[0] == 19:
-                player_car1.bounce()
-            else:
-                player_car1.reset()
-                player_car2.reset()
-                computer_car.reset()
-                print('player 1 wins')
-
-        if finish_collide_poi1 != None:
-            if finish_collide_poi1[0]==19:
-                player_car2.bounce()
-            else:
-                player_car1.reset()
-                player_car2.reset()
-                computer_car.reset()
-                print('player 2 wins')
-        if finish_collide_poi2 != None:
-            if finish_collide_poi2[0]== 19:
-                computer_car.bounce()
-            else:
-                player_car1.reset()
-                player_car2.reset()
-                computer_car.reset()
-                print('commputer wins')
+        handle_collision(player_car1, player_car2, computer_car, game_info)
 
 
 class AbstractCar:
@@ -214,12 +179,18 @@ class Computer_car(AbstractCar):
         if rect.collidepoint(*target):
             self.current_point +=1
 
+    def reset(self):
+        self.vel = 0
+        self.angle = 270
+        self.x , self.y = self.START_POS
+        self.current_point = 0
+    
     def next_level(self, level):
         self.reset()
-        self.vel = self.max_vel +(level - 1)*0.2
-        self.current_point = 0
+        self.vel = self.max_vel + (level-1)*0.2
 
-class Game_imfo():
+
+class Game_imfo:
     LEVELS = 5
 
     def __init__(self, level =1):
@@ -248,6 +219,52 @@ class Game_imfo():
             return 0 
         return  time.time() - self.level_start_time
     
+def handle_collision(player_car1, player_car2, computer_car, game_info):
+    if player_car1.collide(TRACK_BORDER_MASK) != None:
+        player_car1.bounce()
+
+    if player_car2.collide(TRACK_BORDER_MASK) != None:
+        player_car2.bounce()
+
+
+    finish_collide_poi0 = player_car1.collide(FINISH_MASK, 224, 785)
+    if finish_collide_poi0 != None:
+        if finish_collide_poi0[0] == 19:
+            player_car1.bounce()
+        else:
+            blit_text_center(WIN, MAIN_FONT, f'player 1 wins')
+            pygame.display.update()
+            pygame.time.wait(5000)
+            player_car1.reset()
+            player_car2.reset()
+            computer_car.next_level(game_info.level)
+            
+    finish_collide_poi1 = player_car2.collide(FINISH_MASK, 224, 785)
+    if finish_collide_poi1 != None:
+        if finish_collide_poi1[0]==19:
+            player_car2.bounce()
+        else:
+            blit_text_center(WIN, MAIN_FONT, f'player 2 wins')
+            pygame.display.update()
+            pygame.time.wait(5000)
+            player_car1.reset()
+            player_car2.reset()
+            computer_car.next_level(game_info.level)
+            
+    finish_collide_poi2 = computer_car.collide(FINISH_MASK, 224, 785)
+    if finish_collide_poi2 != None:
+        if finish_collide_poi2[0]== 19:
+            computer_car.bounce()
+        else:
+            blit_text_center(WIN, MAIN_FONT, f'You Lost!!')
+            pygame.display.update()
+            pygame.time.wait(5000)
+            
+            player_car1.reset()
+            player_car2.reset()
+            computer_car.reset()
+            
+
 
 def draw(win, images, player_car1, player_car2, computer_car, game_info):
     for img, pos in images:
