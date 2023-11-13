@@ -25,7 +25,7 @@ def main():
     running = True
     player_car1 = Player_car1(8, 4)
     player_car2 = Player_car2(8, 4)
-    computer_car = Computer_car(1,4, PATH)
+    computer_car = Computer_car(1, 2, PATH)
     game_info = Game_imfo()
     FPS = 60
     clock = pygame.time.Clock()
@@ -123,7 +123,7 @@ class Player_car2(AbstractCar):
     IMG = GREEN_CAR
     START_POS = (260, 826)
 
-# , (1460, 441)
+
 PATH =[(369, 800), (1337, 800), (1420, 763), (1329, 690), (891, 703), (561, 356), (579, 226), (724, 213), (1027, 501), (1369, 517), (1473, 324), (1212, 77), (841, 73), (331, 72), (172, 170), (65, 313), (71, 738), (173, 812), (230, 820)]
 class Computer_car(AbstractCar):
     IMG = WHITE_CAR
@@ -188,7 +188,8 @@ class Computer_car(AbstractCar):
     
     def next_level(self, level):
         self.reset()
-        self.vel = self.max_vel + ((level-1)*0.5)
+        self.vel = self.max_vel + ((level-1)*0.4)
+        self.resolution_vel = self.resolution_vel+ 0.4
 
 
 class Game_imfo:
