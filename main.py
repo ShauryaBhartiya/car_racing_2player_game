@@ -25,7 +25,7 @@ def main():
     running = True
     player_car1 = Player_car1(8, 4)
     player_car2 = Player_car2(8, 4)
-    computer_car = Computer_car(4,4, PATH)
+    computer_car = Computer_car(1,4, PATH)
     game_info = Game_imfo()
     FPS = 60
     clock = pygame.time.Clock()
@@ -36,6 +36,7 @@ def main():
         clock.tick(FPS)
     
         draw(WIN, images, player_car1, player_car2, computer_car, game_info)    
+
 
         while not game_info.started:
             blit_text_center(WIN, MAIN_FONT, f'press any key to start the level {game_info.level}')
@@ -187,11 +188,11 @@ class Computer_car(AbstractCar):
     
     def next_level(self, level):
         self.reset()
-        self.vel = self.max_vel + (level-1)*0.2
+        self.vel = self.max_vel + ((level-1)*0.5)
 
 
 class Game_imfo:
-    LEVELS = 5
+    LEVELS = 8
 
     def __init__(self, level =1):
         self.level = level
@@ -235,6 +236,7 @@ def handle_collision(player_car1, player_car2, computer_car, game_info):
             blit_text_center(WIN, MAIN_FONT, f'player 1 wins')
             pygame.display.update()
             pygame.time.wait(5000)
+            game_info.next_level()
             player_car1.reset()
             player_car2.reset()
             computer_car.next_level(game_info.level)
@@ -247,6 +249,7 @@ def handle_collision(player_car1, player_car2, computer_car, game_info):
             blit_text_center(WIN, MAIN_FONT, f'player 2 wins')
             pygame.display.update()
             pygame.time.wait(5000)
+            game_info.next_level()
             player_car1.reset()
             player_car2.reset()
             computer_car.next_level(game_info.level)
@@ -259,7 +262,7 @@ def handle_collision(player_car1, player_car2, computer_car, game_info):
             blit_text_center(WIN, MAIN_FONT, f'You Lost!!')
             pygame.display.update()
             pygame.time.wait(5000)
-            
+
             player_car1.reset()
             player_car2.reset()
             computer_car.reset()
