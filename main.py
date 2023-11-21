@@ -48,9 +48,7 @@ def main():
                     game_info.start_level()        
 
         for event in pygame.event.get():
-            if event.type== pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                computer_car.path.append(pos)
+                    
             if event.type == pygame.QUIT:
                 running = False
 
@@ -140,10 +138,6 @@ class Computer_car(AbstractCar):
     def draw_point(self, win):
         for point in self.path:
             pygame.draw.circle(win, (0,255,0) , point, 5)
-
-    def draw(self, win):
-        super().draw(win)
-        self.draw_point(win)
 
     def move(self):
         if self.current_point >= len(self.path):
